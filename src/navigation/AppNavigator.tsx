@@ -5,12 +5,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View } from 'react-native';
 
 import {
-  PetsStackParamList,
+  PetStackParamList,
   HealthStackParamList,
   TrackingStackParamList,
   SettingsStackParamList,
-  MainTabParamList,
+  RootTabParamList,
+  OnboardingStackParamList,
 } from './types';
+import { useOnboardingStore } from '../stores/onboardingStore';
 
 // Pet Screens
 import PetListScreen from '../screens/pets/PetListScreen';
@@ -34,11 +36,21 @@ import ChangeEmailScreen from '../screens/settings/ChangeEmailScreen';
 import ChangePasswordScreen from '../screens/settings/ChangePasswordScreen';
 import PremiumScreen from '../screens/settings/PremiumScreen';
 
-const PetsStack = createNativeStackNavigator<PetsStackParamList>();
+// Onboarding Screens
+import WelcomeScreen from '../screens/onboarding/WelcomeScreen';
+import QuizIdentityScreen from '../screens/onboarding/QuizIdentityScreen';
+import QuizEnergyScreen from '../screens/onboarding/QuizEnergyScreen';
+import QuizAppetiteScreen from '../screens/onboarding/QuizAppetiteScreen';
+import AnalysisScreen from '../screens/onboarding/AnalysisScreen';
+import PerfectDayScreen from '../screens/onboarding/PerfectDayScreen';
+import LoginScreen from '../screens/LoginScreen';
+
+const PetStack = createNativeStackNavigator<PetStackParamList>();
 const HealthStack = createNativeStackNavigator<HealthStackParamList>();
 const TrackingStack = createNativeStackNavigator<TrackingStackParamList>();
 const SettingsStack = createNativeStackNavigator<SettingsStackParamList>();
-const Tab = createBottomTabNavigator<MainTabParamList>();
+const Tab = createBottomTabNavigator<RootTabParamList>();
+const OnboardingStack = createNativeStackNavigator<OnboardingStackParamList>();
 
 // Tab icon component
 const TabIcon = ({ name, focused }: { name: string; focused: boolean }) => {
@@ -58,31 +70,31 @@ const TabIcon = ({ name, focused }: { name: string; focused: boolean }) => {
   );
 };
 
-function PetsStackNavigator() {
+function PetStackNavigator() {
   return (
-    <PetsStack.Navigator
+    <PetStack.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: '#6366F1' },
         headerTintColor: '#fff',
         headerTitleStyle: { fontWeight: '600' },
       }}
     >
-      <PetsStack.Screen
+      <PetStack.Screen
         name="PetList"
         component={PetListScreen}
         options={{ title: 'My Pets' }}
       />
-      <PetsStack.Screen
+      <PetStack.Screen
         name="AddPet"
         component={AddPetScreen}
         options={{ title: 'Add Pet' }}
       />
-      <PetsStack.Screen
+      <PetStack.Screen
         name="PetDetail"
         component={PetDetailScreen}
         options={{ title: 'Pet Details' }}
       />
-    </PetsStack.Navigator>
+    </PetStack.Navigator>
   );
 }
 
@@ -180,6 +192,20 @@ function SettingsStackNavigator() {
   );
 }
 
+export function OnboardingStackNavigator() {
+  return (
+    <OnboardingStack.Navigator screenOptions={{ headerShown: false }}>
+      <OnboardingStack.Screen name="Welcome" component={WelcomeScreen} />
+      <OnboardingStack.Screen name="QuizIdentity" component={QuizIdentityScreen} />
+      <OnboardingStack.Screen name="QuizEnergy" component={QuizEnergyScreen} />
+      <OnboardingStack.Screen name="QuizAppetite" component={QuizAppetiteScreen} />
+      <OnboardingStack.Screen name="Analysis" component={AnalysisScreen} />
+      <OnboardingStack.Screen name="PerfectDay" component={PerfectDayScreen} />
+      <OnboardingStack.Screen name="Login" component={LoginScreen} />
+    </OnboardingStack.Navigator>
+  );
+}
+
 export default function AppNavigator() {
   return (
     <NavigationContainer>
@@ -203,7 +229,7 @@ export default function AppNavigator() {
           },
         })}
       >
-        <Tab.Screen name="Pets" component={PetsStackNavigator} />
+        <Tab.Screen name="Pets" component={PetStackNavigator} />
         <Tab.Screen name="Health" component={HealthStackNavigator} />
         <Tab.Screen name="Track" component={TrackingStackNavigator} />
         <Tab.Screen name="Settings" component={SettingsStackNavigator} />

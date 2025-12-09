@@ -2,7 +2,7 @@ import { NavigatorScreenParams } from '@react-navigation/native';
 import { Pet, HealthRecord, Appointment } from '../types/database';
 
 // Stack navigators for each tab
-export type PetsStackParamList = {
+export type PetStackParamList = {
     PetList: undefined;
     AddPet: undefined;
     PetDetail: { pet: Pet };
@@ -29,9 +29,19 @@ export type SettingsStackParamList = {
     Premium: undefined;
 };
 
+export type OnboardingStackParamList = {
+    Welcome: undefined;
+    QuizIdentity: undefined;
+    QuizEnergy: undefined;
+    QuizAppetite: undefined;
+    Analysis: undefined;
+    PerfectDay: undefined;
+    Login: undefined;
+};
+
 // Main tab navigator
-export type MainTabParamList = {
-    Pets: NavigatorScreenParams<PetsStackParamList>;
+export type RootTabParamList = {
+    Pets: NavigatorScreenParams<PetStackParamList>;
     Health: NavigatorScreenParams<HealthStackParamList>;
     Track: NavigatorScreenParams<TrackingStackParamList>;
     Settings: NavigatorScreenParams<SettingsStackParamList>;
@@ -39,7 +49,7 @@ export type MainTabParamList = {
 
 // Root stack (for modals, etc.)
 export type RootStackParamList = {
-    Main: NavigatorScreenParams<MainTabParamList>;
+    Main: NavigatorScreenParams<RootTabParamList>;
     Login: undefined;
 };
 

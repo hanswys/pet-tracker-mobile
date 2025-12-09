@@ -21,6 +21,7 @@ export interface Pet {
 }
 
 export interface PetInsert {
+    user_id?: string;
     name: string;
     species: Species;
     breed?: string | null;

@@ -8,9 +8,10 @@ import { AuthProvider, useAuth } from './src/contexts/AuthContext';
 import { SubscriptionProvider } from './src/contexts/SubscriptionContext';
 import { PetProvider } from './src/contexts/PetContext';
 import LoginScreen from './src/screens/LoginScreen';
-import AppNavigator from './src/navigation/AppNavigator';
+import AppNavigator, { OnboardingStackNavigator } from './src/navigation/AppNavigator';
 import { initErrorTracking } from './src/services/error-tracking';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
 
 // Initialize error tracking
 initErrorTracking();
@@ -26,23 +27,21 @@ function AppContent() {
     );
   }
 
+  // If no session, show Onboarding Flow (which includes Login)
+  // If session exists, AppNavigator (Main Tabs) handles the NavigationContainer internally?
+  // Wait, AppNavigator exports NavigationContainer wrapping MainTabNavigator.
+  // We should probably pull NavigationContainer OUT to here so we can switch stacks.
+  
   if (!session) {
     return (
-      <>
-        <StatusBar style="auto" />
-        <LoginScreen />
-      </>
+        <NavigationContainer>
+            <OnboardingStackNavigator />
+        </NavigationContainer>
     );
   }
 
-  return (
-    <SubscriptionProvider>
-      <PetProvider>
-        <StatusBar style="auto" />
-        <AppNavigator />
-      </PetProvider>
-    </SubscriptionProvider>
-  );
+  // AppNavigator already has NavigationContainer, so just return it
+  return <AppNavigator />;
 }
 
 export default function App() {
@@ -50,7 +49,11 @@ export default function App() {
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <AuthProvider>
-          <AppContent />
+          <SubscriptionProvider>
+            <PetProvider>
+              <AppContent />
+            </PetProvider>
+          </SubscriptionProvider>
         </AuthProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
