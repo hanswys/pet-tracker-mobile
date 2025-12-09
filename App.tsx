@@ -1,5 +1,5 @@
 import 'react-native-get-random-values';
-import '../global.css';
+import './global.css';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator } from 'react-native';
 import { AuthProvider, useAuth } from './src/contexts/AuthContext';
