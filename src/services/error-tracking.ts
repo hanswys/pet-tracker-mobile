@@ -14,7 +14,7 @@ export const initErrorTracking = () => {
   try {
     Sentry.init({
       dsn: config.sentry.dsn,
-      enableInExpoDevelopment: false, // Disable in development
+      enabled: !__DEV__, // Disable in development
       debug: __DEV__,
       tracesSampleRate: 1.0,
     });

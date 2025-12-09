@@ -14,7 +14,12 @@
     },
     "ios": {
       "bundleIdentifier": "com.petsystem.app",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Pet Tracker uses your location to track walks with your pet",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Pet Tracker uses your location to track walks even when the app is in the background",
+        "NSPhotoLibraryUsageDescription": "Pet Tracker needs access to your photos to add pet profile pictures"
+      }
     },
     "android": {
       "package": "com.petsystem.app",
@@ -23,13 +28,20 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-localization",
+      "expo-location",
+      "expo-image-picker",
       [
         "onesignal-expo-plugin",
         {

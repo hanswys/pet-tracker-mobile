@@ -1,33 +1,24 @@
-import PostHog from 'posthog-react-native';
+import { PostHog } from 'posthog-react-native';
 import { config } from '../lib/config';
 
-let posthogInitialized = false;
+let posthogClient: PostHog | null = null;
 
 /**
  * Initialize PostHog analytics
  */
 export const initAnalytics = async (userId?: string) => {
-  if (posthogInitialized || !config.posthog.apiKey) {
+  if (posthogClient || !config.posthog.apiKey) {
     return;
   }
 
   try {
-    await PostHog.initAsync(config.posthog.apiKey, {
+    posthogClient = new PostHog(config.posthog.apiKey, {
       host: config.posthog.host,
-      errorTracking: {
-        autocapture: {
-          uncaughtExceptions: true,
-          unhandledRejections: true,
-          console: ['error', 'warn'],
-        },
-      },
     });
 
     if (userId) {
-      PostHog.identify(userId);
+      posthogClient.identify(userId);
     }
-
-    posthogInitialized = true;
   } catch (error) {
     console.error('Failed to initialize PostHog:', error);
   }
@@ -37,8 +28,8 @@ export const initAnalytics = async (userId?: string) => {
  * Track an event
  */
 export const trackEvent = (eventName: string, properties?: Record<string, any>) => {
-  if (posthogInitialized) {
-    PostHog.capture(eventName, properties);
+  if (posthogClient) {
+    posthogClient.capture(eventName, properties);
   }
 };
 
@@ -46,8 +37,8 @@ export const trackEvent = (eventName: string, properties?: Record<string, any>) 
  * Identify a user
  */
 export const identifyUser = (userId: string, properties?: Record<string, any>) => {
-  if (posthogInitialized) {
-    PostHog.identify(userId, properties);
+  if (posthogClient) {
+    posthogClient.identify(userId, properties);
   }
 };
 
@@ -55,8 +46,8 @@ export const identifyUser = (userId: string, properties?: Record<string, any>) =
  * Reset user (on logout)
  */
 export const resetAnalytics = () => {
-  if (posthogInitialized) {
-    PostHog.reset();
+  if (posthogClient) {
+    posthogClient.reset();
   }
 };
 
